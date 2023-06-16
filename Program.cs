@@ -4,7 +4,7 @@
 	{
 		public class NumberWaysReorderArrayGetSameBST
 		{
-			private long modulo = 1000000007;
+			private long modulo = (long)1e9 + 7;
 			private long[][] table;
 
 			private long DFS(List<int> nums)
@@ -31,26 +31,20 @@
 				long rightNumWays = DFS(rightNodes) % modulo;
 				return leftNumWays * rightNumWays % modulo * table[n - 1][leftNodes.Count] % modulo;
 			}
-			private void GetPascalTriangle(int numRows)
+			
+			public int NumOfWays(int[] nums)
 			{
-				table = new long[numRows][];
-				for (int r = numRows - 1; r >= 0; --r)
+				int n = nums.Length;
+				table = new long[n][];
+				for (int r = 0; r < n; ++r)
 				{
 					table[r] = new long[r + 1];
-					Array.Fill(table[r], 1);
-				}
-				for (int r = 2; r < numRows; ++r)
-				{
-					for (int c = 1; c < table[r].Length - 1; ++c)
+					table[r][0] = table[r][^1] = 1;
+					for (int c = 1; c < r; ++c)
 					{
 						table[r][c] = (table[r - 1][c - 1] + table[r - 1][c]) % modulo;
 					}
 				}
-			}
-			public int NumOfWays(int[] nums)
-			{
-				int n = nums.Length;
-				GetPascalTriangle(n);
 				return (int)((DFS(nums.ToList()) - 1) % modulo);
 			}
 		}
